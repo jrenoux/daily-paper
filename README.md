@@ -1,5 +1,5 @@
 # Daily Paper
-Given a list of papers and a list of notes (in any format), opens a random paper without an associated org-roam note. 
+Given a list of papers and a list of notes (in any format), opens a random paper without an associated note. 
 
 # Requirements
  - A folder with all your papers pdf
