@@ -1,22 +1,34 @@
 mod data_model;
 
-use std::ffi::OsStr;
+use std::env::current_exe;
 use std::fs;
-use std::ops::Deref;
+use std::path::Path;
 use regex::Regex;
 use rand::seq::SliceRandom;
 use crate::data_model::Config;
 
 fn main() {
     // 1. Read the config file to get the folders location
-    let config_file: String = "config/config.json".to_string();
+    // get the current path of the executable, the file should be alongside it
+    let exe_path = match current_exe() {
+        Ok(full_path) => {match full_path.parent() {
+            None => {"".to_string()}
+            Some(parent_path) => {parent_path.to_str().unwrap().to_string()}
+        }}
+        Err(_) => {"".to_string()}
+    };
+
+    let config_file: String = format!("{}/../../config/config.json", exe_path);
     let config_str = fs::read_to_string(&config_file).expect(format!("Config file {} could not be read", &config_file).as_str());
 
     let config: Config = serde_json::from_str(&config_str).unwrap();
     println!("{:?}", config);
 
     // we create the regex for notes and papers (there are stuff in this folder which are not papers)
-    let re = Regex::new(r"^[[:alpha:]]+\d{4}.*$").unwrap(); // TODO Change here if your format is different
+    if config.regex.is_empty() || config.regex.eq(""){
+        config.regex == ".";
+    }
+    let re = Regex::new(&*config.regex).unwrap();
 
     // 2. Get all paper names in the paper folder
     let papers_path = fs::read_dir(&config.paper_folder).expect(format!("Could not read folder {} ", &config.paper_folder).as_str());

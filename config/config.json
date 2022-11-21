@@ -1,4 +1,5 @@
 {
-  "paperFolder": "/home/jennifer/work/literature/papers",
-  "noteFolder": "/home/jennifer/private/nextcloud/org/org-roam"
+  "paperFolder": "<path/to/your/paper/folder>",
+  "noteFolder": "path/to/your/note/folder",
+  "regex": "regular-expression-to-filter-the-paper-names/remove-if-not-needed"
 }
